@@ -1,0 +1,20 @@
+Inputs: in[4], load;
+Outputs: out[4];
+
+// 1. specify the components you want to use here
+Parts:
+  myreg1 REGISTER,
+  myreg2 REGISTER,
+  myreg3 REGISTER,
+  myreg4 REGISTER;
+
+// 2. wire them up
+Wires:
+  in[1] -> myreg1.in, in[2] -> myreg2.in, 
+  in[3] -> myreg3.in, in[4] -> myreg4.in,
+  
+  myreg1.out -> out[1], myreg2.out -> out[2],
+  myreg3.out -> out[3], myreg4.out -> out[4],
+  
+  load -> myreg1.load, load -> myreg2.load,
+  load -> myreg3.load, load -> myreg4.load;

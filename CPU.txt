@@ -1,0 +1,35 @@
+Inputs: instr[16], data[16], reset;
+Outputs: write, dataAddr[16], instrAddr[16], result[16];
+
+
+// 1. more devices are needed to implement behavior as described in specification
+Parts:
+  dec DECODER, mReg REGISTER16B, aReg REGISTER16B, pc COUNTER16B, alu ALU16B,
+  and1 AND,and2 AND,or1 OR,and3 AND,
+  mux1 MUX,mux16b1 MUX16B,mux16b2 MUX16B, mux16b3 MUX16B,mux16b4 MUX16B,
+  mux4w MUX4W16B;
+
+// 2. wire them up
+Wires:
+  dec.cToM->and1.in1, dec.loadM->and1.in2, and1.out->mux16b1.sel,
+  dec.constant->mux16b1.in2[1:15],alu.out->mux16b1.in1,
+  mux16b1.out->mReg.in,
+  
+  0->mux16b2.in1,alu.out->mux16b2.in2,
+  dec.loadA->mux16b2.sel,mux16b2.out->aReg.in,
+  dec.loadD->write,
+  dec.opCode->alu.opCode,
+  
+  dec.op1->mux16b3.sel,mux16b3.out->alu.in1,
+  aReg.out->mux16b3.in1,dec.constant[1:5]->mux16b3.in2[1:5],
+  
+  dec.op2->mux4w.sel,mux4w.out->alu.in2,
+  dec.constant[1:5]->mux4w.in1[1:5],aReg.out->mux4w.in2,
+  mReg.out->mux4w.in3,data->mux4w.in4,
+  
+  dec.jmpIfZ->and3.in1,alu.zero->and3.in2, and3.out->pc.load,
+  mReg.out->pc.in,
+  
+  alu.out->result,mReg.out->dataAddr,pc.out->instrAddr, reset->pc.reset,
+  dec.loadA->aReg.load,
+  dec.loadM->mReg.load,instr->dec.instr;

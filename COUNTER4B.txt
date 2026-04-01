@@ -1,0 +1,21 @@
+Inputs: in[4], load, reset;
+Outputs: out[4];
+
+// 1. specify the components you want to use here
+Parts:
+  mux4 MUX4B,
+  mux44 MUX4B,
+  reg4 REGISTER4B,
+  adder ADDER4B,
+  and AND,
+  not1 NOT,
+  not2 NOT;
+
+// 2. wire them up
+Wires:
+  load -> not1.in, reset -> not2.in,
+  in -> mux4.in1, adder.out -> mux4.in2, not1.out -> mux4.sel, 
+  mux4.out -> mux44.in1, 0 -> mux44.in2, reset -> mux44.sel,
+  mux44.out ->reg4.in, 1 -> reg4.load, reg4.out -> adder.in1,
+  not1.out -> and.in1, not2.out -> and.in2,
+  and.out -> adder.in2[1], reg4.out -> out;

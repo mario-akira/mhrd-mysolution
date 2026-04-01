@@ -1,0 +1,15 @@
+Inputs: in[4];
+Outputs: out;
+
+// 1. specify the components you want to use here
+Parts:
+  myor1 OR,
+  myor2 OR,
+  myor3 OR;
+
+// 2. wire them up
+Wires:
+  in[1] -> myor1.in1, in[2] -> myor1.in2,
+  in[3] -> myor2.in1, in[4] -> myor2.in2,
+  myor1.out -> myor3.in1, myor2.out -> myor3.in2,
+  myor3.out -> out;
