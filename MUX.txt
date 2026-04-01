@@ -1,0 +1,16 @@
+Inputs: in1, in2, sel;
+Outputs: out;
+
+// 1. specify the components you want to use here
+Parts:
+  myand1 AND,
+  myand2 AND,
+  myor OR,
+  mynot NOT;
+
+// 2. wire them up
+Wires:
+  in1 -> myand1.in1, sel -> mynot.in,
+  mynot.out -> myand1.in2, myand1.out -> myor.in1,
+  in2 -> myand2.in1, sel -> myand2.in2,
+  myand2.out -> myor.in2, myor.out -> out;

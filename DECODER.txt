@@ -1,0 +1,27 @@
+Inputs: instr[16];
+Outputs: cToM, loadA, loadD, loadM, op1, op2[2], opCode[4], jmpIfZ, constant[15];
+
+// 1. specify the components you want to use here
+Parts:
+  mux MUX,muxA MUX, muxD MUX,muxM MUX, muxj MUX,
+  not NOT,
+  muxop1 MUX,
+  demux DEMUX4W;
+
+// 2. wire them up
+Wires:
+  instr[16] -> mux.sel, 0->mux.in1,1->mux.in2, instr[16]->not.in,
+  not.out->demux.in,instr[14:15]->demux.sel,
+  demux.out2->muxA.sel,demux.out3->muxM.sel,demux.out4->muxD.sel,
+  0->muxA.in1,1->muxA.in2,muxA.out->loadA,
+  0->muxD.in1,1->muxD.in2,muxD.out->loadD,
+  instr[16]->muxM.in1,1->muxM.in2,muxM.out->loadM,
+
+  instr[6]->muxj.in1,0->muxj.in2,instr[16]->muxj.sel, muxj.out->jmpIfZ,
+  
+  instr[16]->cToM,
+  instr[13]->op1,
+  instr[11:12]->op2,
+  instr[7:10]->opCode,
+//  instr[6]->jmpIfZ,
+  instr[1:15]->constant;

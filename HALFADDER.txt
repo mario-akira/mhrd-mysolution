@@ -1,0 +1,12 @@
+Inputs: in1, in2;
+Outputs: out, carry;
+
+// 1. specify the components you want to use here
+Parts:
+  myand AND,
+  myxor XOR;
+
+// 2. wire them up
+Wires:
+  in1 -> myxor.in1, in2 -> myxor.in2, myxor.out -> out,
+  in1 -> myand.in1, in2 -> myand.in2, myand.out -> carry;
